@@ -21,12 +21,21 @@ namespace WpfApp4
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow : Window
     {
 
         private static Regex pattern = new Regex(@"[^\x20-\x7e]");
 
         private static byte[] HeaderByte = new byte[] { 0xF0, 0x43, 0x10, 0x7F, 0x1C, 0x00 };
+
+        private enum Mode
+        {
+            Performance,
+            Voice,
+            Master
+        }
+
+        private Mode _mode; 
 
 
 
@@ -37,7 +46,9 @@ namespace WpfApp4
         {
             InitializeComponent();
 
-            initDevices(); 
+            initDevices();
+
+            _mode = Mode.Performance; 
         }
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -60,7 +71,7 @@ namespace WpfApp4
             {
                 error_label.Content = "It can only contain alphanumeric characters";
 
-                return; 
+                return;
             }
 
             // performance name is valid
@@ -69,37 +80,70 @@ namespace WpfApp4
 
             var bufferList = new List<byte[]>();
 
-            int i = 0; 
+            int i = 0;
 
-            foreach(char character in performaneNameCharArray)
+            foreach (char character in performaneNameCharArray)
             {
                 bufferList.Add(HeaderByte);
                 bufferList.Add(new byte[] { 0x30, 0x00, Convert.ToByte(i.ToString("x"), 16), Convert.ToByte(character) });
 
                 bufferList.Add(new byte[] { 0xF7 });
 
-                i++; 
+                i++;
 
-               
+
             }
+            byte modeByte = modeToModeByte();
 
-            for(int j = i  ; j<20; j++)
+            for (int j = i; j < 20; j++)
             {
                 bufferList.Add(HeaderByte);
-                bufferList.Add(new byte[] { 0x30, 0x00, Convert.ToByte(j.ToString("x" ), 16), 0x20 });
+                bufferList.Add(new byte[] { modeByte, 0x00, Convert.ToByte(j.ToString("x"), 16), 0x20 });
 
                 bufferList.Add(new byte[] { 0xF7 });
             }
 
-            using (var midiOut = new MidiOut(comboBoxMidiOutDevices.SelectedIndex))
+            try
             {
-                foreach (var listItem in bufferList)
+                using (var midiOut = new MidiOut(comboBoxMidiOutDevices.SelectedIndex))
                 {
-                    midiOut.SendBuffer(listItem);
+                    foreach (var listItem in bufferList)
+                    {
+                        midiOut.SendBuffer(listItem);
+                    }
                 }
+
+            }
+            catch (Exception x)
+            {
+
+                MessageBox.Show(x.Message);
             }
 
 
+
+        }
+
+        private byte modeToModeByte()
+        {
+            byte modeByte;
+            switch (_mode)
+            {
+                case Mode.Performance:
+                    modeByte = 0x30;
+                    break;
+                case Mode.Voice:
+                    modeByte = 0x40;
+                    break;
+                case Mode.Master:
+                    modeByte = 0x50;
+                    break;
+                default:
+                    modeByte = 0x30;
+                    break;
+            }
+
+            return modeByte;
         }
 
         public void initDevices()
@@ -136,6 +180,21 @@ namespace WpfApp4
 
 
 
+        }
+
+        private void perfRBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            _mode = Mode.Performance; 
+        }
+
+        private void voxRBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            _mode = Mode.Voice; 
+        }
+
+        private void masterRBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            _mode = Mode.Master; 
         }
     }
 }

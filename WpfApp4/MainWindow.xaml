@@ -1,17 +1,33 @@
-﻿<mah:MetroWindow x:Class="WpfApp4.MainWindow"
+﻿<Window x:Class="WpfApp4.MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:uc="clr-namespace:WpfApp4"
                  Title="MainWindow"
-                 Height="600"
-                 Width="800">
+                 Height="314.685"
+                 Width="513.334">
     <Grid>
         <Label x:Name="label" Content="Performance Name:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="43" Margin="137,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="270" Padding="10" FontFamily="Yamaha EBM 10" Background="#FFE8E8E8" BorderBrush="#FF7A7A7A" TextChanged="textBox_TextChanged" MaxLength="20"/>
         <Button x:Name="getNameBtn" Content="Get Name" HorizontalAlignment="Left" Margin="424,14,0,0" VerticalAlignment="Top" Width="72" Height="43" Click="GetNameBtn_Click"/>
         <Label x:Name="error_label" Content="" HorizontalAlignment="Left" Margin="137,62,0,0" VerticalAlignment="Top" Width="270"/>
-        <ComboBox x:Name="comboBoxMidiInDevices" HorizontalAlignment="Left" Margin="137,127,0,0" VerticalAlignment="Top" Width="299"/>
-        <ComboBox x:Name="comboBoxMidiOutDevices" HorizontalAlignment="Left" Margin="458,127,0,0" VerticalAlignment="Top" Width="299"/>
+        <ComboBox x:Name="comboBoxMidiInDevices" HorizontalAlignment="Left" Margin="137,94,0,0" VerticalAlignment="Top" Width="299"/>
+        <ComboBox x:Name="comboBoxMidiOutDevices" HorizontalAlignment="Left" Margin="137,127,0,0" VerticalAlignment="Top" Width="299"/>
+        <Label Content="Midi In Device:" HorizontalAlignment="Left" Margin="36,90,0,0" VerticalAlignment="Top"/>
+        <Label Content="Midi Out Device:" HorizontalAlignment="Left" Margin="26,123,0,0" VerticalAlignment="Top"/>
+        <Label Content="Label" HorizontalAlignment="Left" Margin="77,154,0,0" VerticalAlignment="Top"/>
+        <StatusBar Margin="0,0,-0.333,0.333" Height="32" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label Content="MOXF Performance Renamer" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                <Label Content="by Andrija Plavša" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            </StackPanel>
+        </StatusBar>
+        <ComboBox HorizontalAlignment="Left" Margin="137,158,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="Performance"/>
+            <ComboBoxItem Content="Voice"/>
+        </ComboBox>
+        <RadioButton x:Name="perfRBtn" Content="Performance" HorizontalAlignment="Left" Margin="137,198,0,0" VerticalAlignment="Top" GroupName="mode" Checked="perfRBtn_Checked"/>
+        <RadioButton x:Name="voxRBtn" Content="Voice" HorizontalAlignment="Left" Margin="227,198,0,0" VerticalAlignment="Top" GroupName="mode" Checked="voxRBtn_Checked"/>
+        <RadioButton x:Name="masterRBtn" Content="Master" HorizontalAlignment="Left" Margin="280,198,0,0" VerticalAlignment="Top" GroupName="mode" Checked="masterRBtn_Checked"/>
 
     </Grid>
-</mah:MetroWindow>
+</Window>
